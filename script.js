@@ -1,1 +1,5 @@
-console.log('Hello!');
+function player(marker){
+    return {marker};
+}
+
+
