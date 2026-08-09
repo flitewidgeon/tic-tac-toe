@@ -4,7 +4,7 @@ function player(marker){
 
 
 function gameBoard(){
-    let grid = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    const grid = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
     const squares = {
         topLeft: grid[0],
@@ -46,6 +46,10 @@ function gameBoard(){
         checkLine(leftDiagonal, marker) || checkLine(rightDiagonal, marker);
     }
 
+    function checkSquareEmpty(position){
+        return grid[position] === 0;
+    }
+
     function addMarker(player, position){
         grid[position] = player.marker;
     }
@@ -56,7 +60,12 @@ function gameBoard(){
         }
     }
 
-    return{grid, checkWin, addMarker, reset};
+    function checkSquaresAvailable(){
+        return grid.includes(0);
+    }
+
+    return{grid, checkSquareEmpty, checkSquaresAvailable, checkWin, addMarker, reset};
 }    
 
-
+board = gameBoard();
+console.log(board.checkSquareEmpty(0));
