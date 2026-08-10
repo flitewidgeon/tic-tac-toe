@@ -67,5 +67,25 @@ function gameBoard(){
     return{grid, checkSquareEmpty, checkSquaresAvailable, checkWin, addMarker, reset};
 }    
 
-board = gameBoard();
-console.log(board.checkSquareEmpty(0));
+
+function game(){
+
+    function randomNum(num){
+        return Math.floor(Math.random() * num);
+    }
+
+    const playerOne = player('O');
+    const playerTwo = player('X');
+
+    // Randomly choose player one or player two to go first
+    let canTakeTurn = randomNum(2) === 0? playerOne : playerTwo;
+
+    // At the end of each turn, change the player that can take a turn
+    canTakeTurn = canTakeTurn === playerOne? playerTwo : playerOne;
+
+    console.log(canTakeTurn);
+
+}
+
+game();
+
