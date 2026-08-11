@@ -68,14 +68,6 @@ function checkSquaresAvailable(){
 return{grid, checkSquareEmpty, checkSquaresAvailable, checkWin, addMarker, reset};
 }    
 
-board = gameBoard();
-player = player('X');
-board.addMarker(player, 0);
-board.addMarker(player, 1);
-board.addMarker(player, 2);
-console.log(board.checkWin(player.marker));
-
-
 function game(){
 
     function randomNum(num){
@@ -84,15 +76,43 @@ function game(){
 
     const playerOne = player('O');
     const playerTwo = player('X');
+    const board = gameBoard();
 
-    // Randomly choose player one or player two to go first
-    let canTakeTurn = randomNum(2) === 0? playerOne : playerTwo;
+    function play(){
+        // Randomly choose player one or player two to go first
+        let canTakeTurn = randomNum(2) === 0? playerOne : playerTwo;
+        let running = true;
 
-    // At the end of each turn, change the player that can take a turn
-    canTakeTurn = canTakeTurn === playerOne? playerTwo : playerOne;
+        function turn(){
+        // get the player to say where they want to place a marker
+            const position = prompt('Which square do you want to put a marker on?');
+        // if the square is unoccupied, place the marker
+            if (board.checkSquareEmpty(position)){
+                board.addMarker(canTakeTurn, position);
+            }
+            else{
+                console.log('That square is occupied!');
+            }
+        // check if the player has a line 
+            if (board.checkWin(canTakeTurn.marker)){
+            // if so, end the game
+                running = false;
+                console.log('The winner is ' + canTakeTurn.marker);
+            }
+        // At the end of each turn, change the player that can take a turn
+            canTakeTurn = canTakeTurn === playerOne? playerTwo : playerOne;
+            // display the updated grid at the end of each turn
+            console.log(board.grid);
+        }
 
-    console.log(canTakeTurn);
+        // take a game turn while there are squares to fill and while there is no winner
+        while(board.checkSquaresAvailable() && running){
+            turn();
+        }
+    }
 
+    return {play};
 }
 
-
+myGame = game();
+myGame.play();
