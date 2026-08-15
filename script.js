@@ -6,33 +6,24 @@ function player(marker){
 function gameBoard(){
     const grid = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-
-
     function checkWin(marker){
-        const squares = {
-            topLeft: grid[0],
-            topCenter: grid[1],
-            topRight: grid[2],
 
-            midLeft: grid[3],
-            center: grid[4],
-            midRight: grid[5],
+        const rows = {
+            top:    [grid[0], grid[1], grid[2]],
+            middle: [grid[3], grid[4], grid[5]],
+            bottom: [grid[6], grid[7], grid[8]],   
+        }
 
-            bottomLeft: grid[6],
-            bottomCenter: grid[7],
-            bottomRight: grid[8] 
-        };
-
-        const topRow = [squares.topLeft, squares.topCenter, squares.topRight];
-        const middleRow = [squares.midLeft, squares.center, squares.midRight];
-        const bottomRow = [squares.bottomLeft, squares.bottomCenter, squares.bottomRight];
-
-        const leftCol = [squares.topLeft, squares.midLeft, squares.bottomLeft];
-        const middleCol = [squares.topCenter, squares.center, squares.bottomCenter];
-        const rightCol = [squares.topRight, squares.midRight, squares.bottomRight];
-
-        const leftDiagonal = [squares.topLeft, squares.center, squares.bottomRight];
-        const rightDiagonal = [squares.topRight, squares.center, squares.bottomLeft];   
+        const cols = {
+            left:   [grid[0], grid[3], grid[6]],
+            middle: [grid[1], grid[4], grid[7]],
+            right:  [grid[2], grid[5], grid[8]],
+        }
+        
+        const diagonals = {
+            left: [grid[0], grid[4], grid[8]],
+            right:[grid[2], grid[4], grid[6]],
+        }
 
         function checkLine(line, marker){
             if (line[0] == marker &&
@@ -42,9 +33,11 @@ function gameBoard(){
         }
         return false;
     }
-    return checkLine(topRow, marker) || checkLine(middleRow, marker) || checkLine(bottomRow, marker)||
-    checkLine(leftCol, marker)|| checkLine(middleCol, marker) || checkLine(rightCol, marker) ||
-    checkLine(leftDiagonal, marker) || checkLine(rightDiagonal, marker);
+
+
+    return checkLine(rows.top, marker) || checkLine(rows.middle, marker) || checkLine(rows.bottom, marker)||
+    checkLine(cols.left, marker)|| checkLine(cols.middle, marker) || checkLine(cols.right, marker) ||
+    checkLine(diagonals.left, marker) || checkLine(diagonals.right, marker);
 }
 
 function checkSquareEmpty(position){
@@ -94,7 +87,7 @@ function game(){
                 console.log('That square is occupied!');
             }
         // check if the player has a line 
-            if (board.checkWin(canTakeTurn.marker)){
+            if (board.checkWin(canTakeTurn.marker, position)){
             // if so, end the game
                 running = false;
                 console.log('The winner is ' + canTakeTurn.marker);
