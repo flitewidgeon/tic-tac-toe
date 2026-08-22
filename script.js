@@ -4,7 +4,7 @@ function player(marker){
 
 
 function gameBoard(){
-    const grid = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    const grid = ['', '', '', '', '', '', '', '', ''];
 
     function checkWin(marker){
 
@@ -41,7 +41,7 @@ function gameBoard(){
 }
 
 function checkSquareEmpty(position){
-    return grid[position] === 0;
+    return grid[position] === '';
 }
 
 function addMarker(player, position){
@@ -50,7 +50,7 @@ function addMarker(player, position){
 
 function reset(){
     for (let i = 0; i < grid.length; i++){
-        grid[i] = 0;
+        grid[i] = '';
     }
 }
 
@@ -107,5 +107,22 @@ function game(){
     return {play};
 }
 
-myGame = game();
-myGame.play();
+function display(grid){
+    const squareList = document.querySelectorAll('.grid-container > div');
+
+    function update (){
+        // the grid and the squareList each have 9 squares
+        for (let i = 0; i < grid.length; i++){
+            squareList[i].textContent = grid[i]
+        }
+    }
+
+    return {update};
+
+}
+
+board = gameBoard();
+myDisplay = display(board.grid);
+myDisplay.update();
+// myGame = game();
+// myGame.play();

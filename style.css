@@ -1,3 +1,10 @@
-h1{
-    color: darkred;
+div {
+    height: 100px;
+    width: 100px;
+    border: 1px solid black;
+}
+
+.grid-container{
+    display: grid;
+    grid-template-columns: 100px 100px 100px;
 }
