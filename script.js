@@ -55,7 +55,7 @@ function reset(){
 }
 
 function checkSquaresAvailable(){
-    return grid.includes(0);
+    return grid.includes('');
 }
 
 return{grid, checkSquareEmpty, checkSquaresAvailable, checkWin, addMarker, reset};
