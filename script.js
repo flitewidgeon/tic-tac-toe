@@ -76,11 +76,11 @@ function game() {
     function play() {
         // Randomly choose player one or player two to go first
         const startPlayer = randomNum(2) === 0 ? playerOne : playerTwo;
-        turn(startPlayer, myDisplay.squareList);
+        turn(startPlayer, myDisplay.gridContainer);
     }
     
-    function turn(player, squareList) {
-        squareList.forEach(square => square.addEventListener('click', (event) => {
+    function turn(player, gridContainer) {
+        gridContainer.addEventListener('click', (event) => {
             const position = event.target.id;
             // if there is no winner, and there are squares available then process the click
             if (running && board.checkSquaresAvailable()) {
@@ -104,13 +104,14 @@ function game() {
             else{
                 console.log("It's a draw");
             }
-        }));
+        });
     }
 
     return { play };
 }
 
 function display() {
+    const gridContainer = document.querySelector('.grid-container');
     const squareList = document.querySelectorAll('.grid-container > div');
 
     function update(board) {
@@ -122,7 +123,7 @@ function display() {
     }
 
 
-    return { squareList, update};
+    return { gridContainer, squareList, update};
 
 }
 
