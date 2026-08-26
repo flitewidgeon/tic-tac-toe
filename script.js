@@ -2,9 +2,12 @@ function player(name, marker) {
     return { name, marker };
 }
 
-
-function gameBoard() {
+const gameBoard = (function () {
     const grid = ['', '', '', '', '', '', '', '', ''];
+
+    function getGrid(){
+        return grid;
+    }
 
     function checkWin(marker) {
 
@@ -58,41 +61,39 @@ function gameBoard() {
         return grid.includes('');
     }
 
-    return { grid, checkSquareEmpty, checkSquaresAvailable, checkWin, addMarker, reset };
-}
+    return { getGrid, checkSquareEmpty, checkSquaresAvailable, checkWin, addMarker, reset };
+}());
 
 function game() {
+
+    const playerOne = player('playerOne', 'O');
+    const playerTwo = player('playerTwo', 'X');
+    let running = true;
 
     function randomNum(num) {
         return Math.floor(Math.random() * num);
     }
 
-    const playerOne = player('playerOne', 'O');
-    const playerTwo = player('playerTwo', 'X');
-    const board = gameBoard();
-    const myDisplay = display();
-    let running = true;
-    
     function play() {
         // Randomly choose player one or player two to go first
         const startPlayer = randomNum(2) === 0 ? playerOne : playerTwo;
-        turn(startPlayer, myDisplay.gridContainer);
+        turn(startPlayer, displayController.gridContainer);
     }
-    
+
     function turn(player, gridContainer) {
         gridContainer.addEventListener('click', (event) => {
             const position = event.target.id;
             // if there is no winner, and there are squares available then process the click
-            if (running && board.checkSquaresAvailable()) {
-                if (board.checkSquareEmpty(position)) {
-                    board.addMarker(player, position);
-                    myDisplay.update(board);
+            if (running && gameBoard.checkSquaresAvailable()) {
+                if (gameBoard.checkSquareEmpty(position)) {
+                    gameBoard.addMarker(player, position);
+                    displayController.update(gameBoard);
 
                     // keep running while a player has not won 
-                   if (board.checkWin(player.marker, position)){
-                    running = false;
-                    console.log(`${player.name} has won!`);
-                   }
+                    if (gameBoard.checkWin(player.marker, position)) {
+                        running = false;
+                        console.log(`${player.name} has won!`);
+                    }
 
                     // toggle player turn
                     player = player == playerOne ? playerTwo : playerOne;
@@ -101,7 +102,7 @@ function game() {
                     console.log('That square is occupied!');
                 }
             }
-            else{
+            else {
                 console.log("It's a draw");
             }
         });
@@ -110,12 +111,12 @@ function game() {
     return { play };
 }
 
-function display() {
+const displayController = (function () {
     const gridContainer = document.querySelector('.grid-container');
     const squareList = document.querySelectorAll('.grid-container > div');
 
-    function update(board) {
-        const grid = board.grid;
+    function update(gameBoard) {
+        const grid = gameBoard.getGrid();
         // the grid and the squareList each have 9 squares
         for (let i = 0; i < grid.length; i++) {
             squareList[i].textContent = grid[i]
@@ -123,9 +124,9 @@ function display() {
     }
 
 
-    return { gridContainer, squareList, update};
+    return { gridContainer, squareList, update };
 
-}
+}());
 
 game = game();
 game.play();
