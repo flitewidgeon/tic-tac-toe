@@ -1,10 +1,28 @@
-div {
-    height: 100px;
-    width: 100px;
-    border: 1px solid black;
-}
-
 .grid-container{
     display: grid;
     grid-template-columns: 100px 100px 100px;
 }
+
+
+.cell{
+    height: 100px;
+    width: 100px;
+    border: 1px solid black;
+
+    display: grid;
+    justify-content: center;
+    align-items: center;  
+}
+
+/* 
+    cell border style
+    first cell: border bottom
+    second cell: border bottom, border left
+    third cell: border bottom, border left
+
+    fourth cell, fifth cell, sixth cell(repeat above)
+
+    seventh cell: nothing
+    8th cell: border left
+    9th cell: border left
+*/
