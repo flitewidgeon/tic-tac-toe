@@ -84,7 +84,7 @@ function game() {
         gridContainer.addEventListener('click', (event) => {
             const position = event.target.id;
             // if there is no winner, and there are squares available then process the click
-            if (running && gameBoard.checkSquaresAvailable()) {
+            if (running) {
                 if (gameBoard.checkSquareEmpty(position)) {
                     gameBoard.addMarker(player, position);
                     displayController.update(gameBoard);
@@ -94,16 +94,16 @@ function game() {
                         running = false;
                         console.log(`${player.name} has won!`);
                     }
-
+                    else if (!gameBoard.checkSquaresAvailable()){
+                        running = false;
+                        console.log("It's a draw");
+                    }
                     // toggle player turn
                     player = player == playerOne ? playerTwo : playerOne;
                 }
                 else {
                     console.log('That square is occupied!');
                 }
-            }
-            else {
-                console.log("It's a draw");
             }
         });
     }
