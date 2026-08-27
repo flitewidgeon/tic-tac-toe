@@ -1,28 +1,22 @@
 .grid-container{
-    display: grid;
+    display: inline-grid;
     grid-template-columns: 100px 100px 100px;
+    background-color: lightgoldenrodyellow;
 }
 
 
 .cell{
     height: 100px;
     width: 100px;
-    border: 1px solid black;
-
     display: grid;
     justify-content: center;
     align-items: center;  
 }
 
-/* 
-    cell border style
-    first cell: border bottom
-    second cell: border bottom, border left
-    third cell: border bottom, border left
+.border-bottom{
+    border-bottom: 2px solid lightblue;
+}
 
-    fourth cell, fifth cell, sixth cell(repeat above)
-
-    seventh cell: nothing
-    8th cell: border left
-    9th cell: border left
-*/
+.border-left{
+    border-left: 2px solid lightblue;
+}
