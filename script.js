@@ -1,5 +1,9 @@
 function player(name, marker) {
 
+    function getName(){
+        return name;
+    }
+
     function setName(newName) {
         name = newName;
     }
@@ -8,7 +12,7 @@ function player(name, marker) {
         return marker;
     }
 
-    return { name, setName, getMarker };
+    return { getName, setName, getMarker };
 }
 
 const gameBoard = (function () {
@@ -77,8 +81,6 @@ const game = (function () {
     const playerOne = player('Player One', 'O');
     const playerTwo = player('Player Two', 'X');
 
-
-
     let running = false;
 
     function getPlayerOne() {
@@ -114,7 +116,7 @@ const game = (function () {
             // keep running while a player has not won 
             if (gameBoard.checkWin(currentPlayer.getMarker(), position)) {
                 running = false;
-                console.log(`${currentPlayer.name} has won!`);
+                console.log(`${currentPlayer.getName()} has won!`);
             }
             else if (!gameBoard.checkSquaresAvailable()) {
                 running = false;
@@ -150,47 +152,52 @@ const displayController = (function () {
         }
     }
 
+    // Get Player Input
     gridContainer.addEventListener('click', (event) => {
         const position = event.target.id;
         game.turn(position);
     });
 
+    // New Game Dialog
+    const newGameButton = document.querySelector('#new-game');
+    const closeButton = document.querySelector('#close-button');
+    const submitButton = document.querySelector('#submit-button');
+    const dialog = document.querySelector('dialog');
+
+    function setPlayerNames(){
+        const playerOneInput = document.querySelector('#player-one').value;
+        const playerTwoInput = document.querySelector('#player-two').value;
+
+        // get the player objects 
+        const playerOne = game.getPlayerOne();
+        const playerTwo = game.getPlayerTwo();
+
+        // Set the name of the players with a default name or user entered name
+        const playerOneName = playerOneInput == null || playerOneInput == '' ? 'Player One' : playerOneInput;
+        playerOne.setName(playerOneName);
+        const playerTwoName = playerTwoInput == null || playerTwoInput == '' ? 'Player Two' : playerTwoInput;
+        playerTwo.setName(playerTwoName);
+    }
+
+    closeButton.addEventListener('click', () => dialog.close());
+
+    newGameButton.addEventListener('click', () => dialog.showModal());
+
+    submitButton.addEventListener('click', () => {
+
+        setPlayerNames();
+
+        dialog.close();
+
+        // reset the game
+        gameBoard.reset();
+        update();
+
+        // start the game
+        game.start();
+    })
 
     return { getGridContainer, getSquareList, update };
 
 }());
 
-
-const newGameButton = document.querySelector('#new-game');
-const closeButton = document.querySelector('#close-button');
-const submitButton = document.querySelector('#submit-button');
-const dialog = document.querySelector('dialog');
-
-closeButton.addEventListener('click', () => dialog.close());
-
-newGameButton.addEventListener('click', () => dialog.showModal());
-
-submitButton.addEventListener('click', () => {
-
-    const playerOneInput = document.querySelector('#player-one').value;
-    const playerTwoInput = document.querySelector('#player-two').value;
-
-    // get the player objects 
-    const playerOne = game.getPlayerOne();
-    const playerTwo = game.getPlayerTwo();
-    // Set the name of the players with a default name or user entered name
-    const playerOneName = playerOneInput == null || playerOneInput == '' ? 'Player One' : playerOneInput;
-    playerOne.setName(playerOneName);
-    const playerTwoName = playerTwoInput == null || playerTwoInput == '' ? 'Player Two' : playerTwoInput;
-    playerTwo.setName(playerTwoName);
-
-    const dialog = document.querySelector('dialog');
-    dialog.close();
-
-    // reset the game
-    gameBoard.reset();
-    displayController.update();
-
-    // start the game
-    game.start();
-})
