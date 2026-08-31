@@ -150,11 +150,9 @@ const displayController = (function () {
         }
     }
 
-    squareList.forEach(square => {
-        square.addEventListener('click', (event) => {
-            const position = event.target.id;
-            game.turn(position);
-        });
+    gridContainer.addEventListener('click', (event) => {
+        const position = event.target.id;
+        game.turn(position);
     });
 
 
