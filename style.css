@@ -1,7 +1,7 @@
 .grid-container{
-    display: inline-grid;
+    display: grid;
     grid-template-columns: 100px 100px 100px;
-    background-color: lightgoldenrodyellow;
+
 }
 
 
@@ -11,6 +11,7 @@
     display: grid;
     justify-content: center;
     align-items: center;  
+    background-color: lightgoldenrodyellow;
 }
 
 .border-bottom{
