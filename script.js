@@ -1,6 +1,6 @@
 function player(name, marker) {
 
-    function getName(){
+    function getName() {
         return name;
     }
 
@@ -80,8 +80,9 @@ const gameBoard = (function () {
 const game = (function () {
     const playerOne = player('Player One', 'O');
     const playerTwo = player('Player Two', 'X');
-
     let running = false;
+    // Randomly choose player one or player two to go first
+    let currentPlayer = randomNum(2) === 0 ? playerOne : playerTwo;
 
     function getPlayerOne() {
         return playerOne;
@@ -97,10 +98,11 @@ const game = (function () {
 
     function start() {
         running = true;
+        displayController.displayMessage(`${currentPlayer.getMarker()}: ${currentPlayer.getName()}'s turn.`);
     }
 
-    // Randomly choose player one or player two to go first
-    let currentPlayer = randomNum(2) === 0 ? playerOne : playerTwo;
+
+
 
     function turn(position) {
         // if there is no winner, and there are squares available then process the click
@@ -108,25 +110,26 @@ const game = (function () {
             if (gameBoard.checkSquareEmpty(position)) {
                 gameBoard.addMarker(currentPlayer, position);
                 displayController.update();
+                // keep running while a player has not won 
+                if (gameBoard.checkWin(currentPlayer.getMarker(), position)) {
+                    running = false;
+                    displayController.displayMessage(`${currentPlayer.getMarker()}: ${currentPlayer.getName()} is the winner!`);
+                }
+                else if (!gameBoard.checkSquaresAvailable()) {
+                    running = false;
+                    displayController.displayMessage("It's a draw!");
+                }
+                else {
+                    // toggle player turn
+                    currentPlayer = currentPlayer == playerOne ? playerTwo : playerOne;
+                    // Display which player has turn
+                    displayController.displayMessage(`${currentPlayer.getMarker()}: ${currentPlayer.getName()}'s turn.`);
+                }
             }
             else {
-                console.log('That square is occupied!');
+                displayController.displayMessage('That square is occupied!');
             }
-
-            // keep running while a player has not won 
-            if (gameBoard.checkWin(currentPlayer.getMarker(), position)) {
-                running = false;
-                console.log(`${currentPlayer.getName()} has won!`);
-            }
-            else if (!gameBoard.checkSquaresAvailable()) {
-                running = false;
-                console.log("It's a draw");
-            }
-            // toggle player turn
-            currentPlayer = currentPlayer == playerOne ? playerTwo : playerOne;
-
         }
-
     }
 
     return { start, getPlayerOne, getPlayerTwo, turn };
@@ -135,6 +138,7 @@ const game = (function () {
 const displayController = (function () {
     const gridContainer = document.querySelector('.grid-container');
     const squareList = document.querySelectorAll('.grid-container > div');
+    const display = document.querySelector('.display');
 
     function getGridContainer() {
         return gridContainer;
@@ -142,6 +146,10 @@ const displayController = (function () {
 
     function getSquareList() {
         return squareList;
+    }
+
+    function displayMessage(text) {
+        display.textContent = text;
     }
 
     function update() {
@@ -164,7 +172,7 @@ const displayController = (function () {
     const submitButton = document.querySelector('#submit-button');
     const dialog = document.querySelector('dialog');
 
-    function setPlayerNames(){
+    function setPlayerNames() {
         const playerOneInput = document.querySelector('#player-one').value;
         const playerTwoInput = document.querySelector('#player-two').value;
 
@@ -197,7 +205,7 @@ const displayController = (function () {
         game.start();
     })
 
-    return { getGridContainer, getSquareList, update };
+    return { getGridContainer, getSquareList, displayMessage, update };
 
 }());
 

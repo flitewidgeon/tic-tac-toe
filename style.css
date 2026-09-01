@@ -4,7 +4,6 @@
 
 }
 
-
 .cell{
     height: 100px;
     width: 100px;
@@ -20,4 +19,14 @@
 
 .border-left{
     border-left: 2px solid lightblue;
+}
+
+.display{
+    height: 50px;
+    width: 300px;
+    border: 2px solid dodgerblue;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
