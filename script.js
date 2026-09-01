@@ -25,26 +25,33 @@ const gameBoard = (function () {
     function checkWin(marker) {
 
         const rows = {
-            top: [grid[0], grid[1], grid[2]],
-            middle: [grid[3], grid[4], grid[5]],
-            bottom: [grid[6], grid[7], grid[8]],
+            top: [0, 1, 2],
+            middle: [3, 4, 5],
+            bottom: [6, 7, 8],
         }
 
         const cols = {
-            left: [grid[0], grid[3], grid[6]],
-            middle: [grid[1], grid[4], grid[7]],
-            right: [grid[2], grid[5], grid[8]],
+            left: [0, 3, 6],
+            middle: [1, 4, 7],
+            right: [2, 5, 8],
         }
 
         const diagonals = {
-            left: [grid[0], grid[4], grid[8]],
-            right: [grid[2], grid[4], grid[6]],
+            left: [0, 4, 8],
+            right: [2, 4, 6],
         }
 
         function checkLine(line, marker) {
-            if (line[0] == marker &&
-                line[1] == marker &&
-                line[2] == marker) {
+            const [first, second, third] = line;
+            if (grid[first] == marker &&
+                grid[second] == marker &&
+                grid[third] == marker) {
+                // highlight the winning squares
+                const squareList = displayController.getSquareList();
+                squareList[first].style.backgroundColor = "orange";
+                squareList[second].style.backgroundColor = "orange";
+                squareList[third].style.backgroundColor = "orange";
+
                 return true;
             }
             return false;
@@ -200,6 +207,8 @@ const displayController = (function () {
         // reset the game
         gameBoard.reset();
         update();
+        // reset board color
+        squareList.forEach(square => square.style.backgroundColor = "lightgoldenrodyellow");
 
         // start the game
         game.start();
