@@ -105,12 +105,12 @@ const game = (function () {
 
     function start() {
         running = true;
+        // disable the name input fields
+                    displayController.getPlayerNameInputFields().forEach(feild => feild.disabled = true);
         displayController.displayMessage(`${currentPlayer.getMarker()}: ${currentPlayer.getName()}'s turn.`);
     }
 
-
-
-
+    
     function turn(position) {
         // if there is no winner, and there are squares available then process the click
         if (running) {
@@ -120,10 +120,14 @@ const game = (function () {
                 // keep running while a player has not won 
                 if (gameBoard.checkWin(currentPlayer.getMarker(), position)) {
                     running = false;
+                    // re-enable player name input at game end
+                    displayController.getPlayerNameInputFields().forEach(feild => feild.disabled = false);
                     displayController.displayMessage(`${currentPlayer.getMarker()}: ${currentPlayer.getName()} is the winner!`);
                 }
                 else if (!gameBoard.checkSquaresAvailable()) {
                     running = false;
+                    // re-enable player name input at game end
+                    displayController.getPlayerNameInputFields().forEach(feild => feild.disabled = false);
                     displayController.displayMessage("It's a draw!");
                 }
                 else {
@@ -173,48 +177,49 @@ const displayController = (function () {
         game.turn(position);
     });
 
-    // New Game Dialog
-    const newGameButton = document.querySelector('#new-game');
-    const closeButton = document.querySelector('#close-button');
-    const submitButton = document.querySelector('#submit-button');
-    const dialog = document.querySelector('dialog');
+    // get player names from input
+    const playerNameInputContainer = document.querySelector('.playerNameInput');
+    const playerNameInputFields = document.querySelectorAll('.playerNameInput input');
 
-    function setPlayerNames() {
-        const playerOneInput = document.querySelector('#player-one').value;
-        const playerTwoInput = document.querySelector('#player-two').value;
-
-        // get the player objects 
-        const playerOne = game.getPlayerOne();
-        const playerTwo = game.getPlayerTwo();
-
-        // Set the name of the players with a default name or user entered name
-        const playerOneName = playerOneInput == null || playerOneInput == '' ? 'Player One' : playerOneInput;
-        playerOne.setName(playerOneName);
-        const playerTwoName = playerTwoInput == null || playerTwoInput == '' ? 'Player Two' : playerTwoInput;
-        playerTwo.setName(playerTwoName);
+    function checkInputValid(event) {
+        // input is valid if the value is neither null nor an empty string
+        if (!(event.target.value == null || event.target.value == ''))
+            return true;
     }
 
-    closeButton.addEventListener('click', () => dialog.close());
+    function setPlayerName(event) {
+        const player = event.target.id == 'player-one' ? game.getPlayerOne() : game.getPlayerTwo();
+        if (checkInputValid(event)) {
+            player.setName(event.target.value);
+        }
+        else {
+            const defaultName = player == game.getPlayerOne() ? 'Player One' : 'Player Two';
+            player.setName(defaultName);
+        }
+    }
 
-    newGameButton.addEventListener('click', () => dialog.showModal());
 
-    submitButton.addEventListener('click', () => {
+   playerNameInputContainer.addEventListener('change', (event) => {
+        setPlayerName(event);
+    });
 
-        setPlayerNames();
+    function getPlayerNameInputFields(){
+        return playerNameInputFields;
+    }
 
-        dialog.close();
+    const newGameButton = document.querySelector('#new-game');
 
+    newGameButton.addEventListener('click', () => {
         // reset the game
         gameBoard.reset();
         update();
         // reset board color
         squareList.forEach(square => square.style.backgroundColor = "lightgoldenrodyellow");
-
         // start the game
         game.start();
-    })
+    });
 
-    return { getGridContainer, getSquareList, displayMessage, update };
+    return { getGridContainer, getSquareList, displayMessage, getPlayerNameInputFields, update };
 
 }());
 
