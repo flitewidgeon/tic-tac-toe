@@ -48,9 +48,9 @@ const gameBoard = (function () {
                 grid[third] == marker) {
                 // highlight the winning squares
                 const squareList = displayController.getSquareList();
-                squareList[first].style.backgroundColor = "orange";
-                squareList[second].style.backgroundColor = "orange";
-                squareList[third].style.backgroundColor = "orange";
+                squareList[first].style.backgroundColor = "gold";
+                squareList[second].style.backgroundColor = "gold";
+                squareList[third].style.backgroundColor = "gold";
 
                 return true;
             }
@@ -106,7 +106,8 @@ const game = (function () {
     function start() {
         running = true;
         // disable the name input fields
-                    displayController.getPlayerNameInputFields().forEach(feild => feild.disabled = true);
+        displayController.getPlayerNameInputFields().forEach(feild => feild.disabled = true);
+        // display starting player
         displayController.displayMessage(`${currentPlayer.getMarker()}: ${currentPlayer.getName()}'s turn.`);
     }
 
@@ -122,12 +123,14 @@ const game = (function () {
                     running = false;
                     // re-enable player name input at game end
                     displayController.getPlayerNameInputFields().forEach(feild => feild.disabled = false);
+                    // display winner name
                     displayController.displayMessage(`${currentPlayer.getMarker()}: ${currentPlayer.getName()} is the winner!`);
                 }
                 else if (!gameBoard.checkSquaresAvailable()) {
                     running = false;
                     // re-enable player name input at game end
                     displayController.getPlayerNameInputFields().forEach(feild => feild.disabled = false);
+                    // display draw message
                     displayController.displayMessage("It's a draw!");
                 }
                 else {
@@ -143,7 +146,7 @@ const game = (function () {
         }
     }
 
-    return { start, getPlayerOne, getPlayerTwo, turn };
+    return { start, getPlayerOne, getPlayerTwo, turn};
 }());
 
 const displayController = (function () {

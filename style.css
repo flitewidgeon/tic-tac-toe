@@ -9,6 +9,17 @@
     margin: 10px 0;
 }
 
+.display{
+    font-size: 18px;
+    padding: 15px;
+    width: 300px;
+    border: 2px solid dodgerblue;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .playerNameInput{
     height: 50px;
     display: flex;
@@ -49,22 +60,17 @@
 }
 
 
-.display{
-    padding: 15px;
-    width: 300px;
-    border: 2px solid dodgerblue;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 #new-game{
+    font-size: 16px;
     padding: 15px;
     width: 300px;
     border: none;
     border-radius: 5px;
     color: white;
     background-color: dodgerblue;
+}
 
+#new-game:active{
+    box-shadow: 2px 2px 2px navy;
+    background-color: royalblue;
 }
