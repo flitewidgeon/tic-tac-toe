@@ -167,7 +167,19 @@ const displayController = (function () {
         const grid = gameBoard.getGrid();
         // the grid and the squareList each have 9 squares
         for (let i = 0; i < grid.length; i++) {
-            squareList[i].textContent = grid[i]
+            // only update the square if it has no marker already
+            if (grid[i] == 'O' && squareList[i].firstElementChild == null){
+                const nought = document.createElement('img');
+                nought.src = './img/nought.png';
+                nought.alt = 'nought';
+                squareList[i].appendChild(nought);
+            }
+            else if (grid[i] == 'X' && squareList[i].firstElementChild == null){
+                const cross = document.createElement('img');
+                cross.src = './img/cross.png';
+                cross.alt = 'cross';
+                squareList[i].appendChild(cross);
+            }
         }
     }
 
@@ -213,8 +225,14 @@ const displayController = (function () {
         // reset the game
         gameBoard.reset();
         update();
-        // reset board color
-        squareList.forEach(square => square.style.backgroundColor = "lightgoldenrodyellow");
+        // for each square remove the image if it has one and reset its color
+        squareList.forEach(square => {
+            const image = square.firstElementChild;
+            if (image){
+                square.removeChild(image);
+            }
+            square.style.backgroundColor = "lightgoldenrodyellow"
+        });
         // start the game
         game.start();
     });
